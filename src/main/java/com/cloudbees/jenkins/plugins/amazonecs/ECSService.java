@@ -337,7 +337,7 @@ class ECSService {
 
         RunTaskRequest req = new RunTaskRequest()
                 .withTaskDefinition(taskDefinition.getTaskDefinitionArn())
-                .withLaunchType(LaunchType.fromValue(template.getLaunchType()))
+                //.withLaunchType(LaunchType.fromValue(template.getLaunchType()))
                 .withOverrides(new TaskOverride()
                         .withContainerOverrides(new ContainerOverride()
                                 .withName(agentContainerName)
@@ -347,6 +347,10 @@ class ECSService {
                 .withPlacementStrategy(template.getPlacementStrategyEntries())
                 .withCluster(clusterArn);
 
+        if (! template.getLaunchType().equals("Default Capacity Provider")) {
+            req.withLaunchType(LaunchType.fromValue(template.getLaunchType()));
+        }
+        
         if (taskDefinition.getNetworkMode() != null && taskDefinition.getNetworkMode().equals("awsvpc")) {
             AwsVpcConfiguration awsVpcConfiguration = new AwsVpcConfiguration();
             awsVpcConfiguration.setAssignPublicIp(template.getAssignPublicIp() ? "ENABLED" : "DISABLED");
