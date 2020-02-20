@@ -86,6 +86,7 @@ public class ECSCloudTest {
         return new ECSTaskTemplate(
             "templateName",
             "label",
+            0,
             "taskDefinitionOverride",
             "image",
             "repositoryCredentials",
