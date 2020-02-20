@@ -71,6 +71,11 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
     private final String label;
 
     /**
+     * Number of nodes to retain on standby
+     */
+    private final int minRetainedNodes;
+
+    /**
      * Task Definition Override to use, instead of a Jenkins-managed Task definition. May be a family name or an ARN.
      */
     @CheckForNull
@@ -268,6 +273,7 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
     @DataBoundConstructor
     public ECSTaskTemplate(@Nonnull String templateName,
                            @Nullable String label,
+                           int minRetainedNodes,
                            @Nullable String taskDefinitionOverride,
                            @Nonnull String image,
                            @Nullable final String repositoryCredentials,
@@ -309,6 +315,7 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
         }
 
         this.label = label;
+        this.minRetainedNodes = minRetainedNodes;
         this.image = image;
         this.repositoryCredentials = StringUtils.trimToNull(repositoryCredentials);
         this.remoteFSRoot = remoteFSRoot;
@@ -392,6 +399,10 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
 
     public String getLabel() {
         return label;
+    }
+
+    public int getMinRetainedNodes() {
+        return minRetainedNodes;
     }
 
     public String getTaskDefinitionOverride() {
@@ -563,6 +574,7 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
 
         String templateName = Strings.isNullOrEmpty(this.templateName) ? parent.getTemplateName() : this.templateName;
         String label = Strings.isNullOrEmpty(this.label) ? parent.getLabel() : this.label;
+        int minRetainedNodes = this.minRetainedNodes == 0 ? parent.getMinRetainedNodes() : this.minRetainedNodes;
         String taskDefinitionOverride = Strings.isNullOrEmpty(this.taskDefinitionOverride) ? parent.getTaskDefinitionOverride() : this.taskDefinitionOverride;
         String image = Strings.isNullOrEmpty(this.image) ? parent.getImage() : this.image;
         String repositoryCredentials = Strings.isNullOrEmpty(this.repositoryCredentials) ? parent.getRepositoryCredentials() : this.repositoryCredentials;
@@ -594,6 +606,7 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
 
         ECSTaskTemplate merged = new ECSTaskTemplate(templateName,
                                                        label,
+                                                       minRetainedNodes,
                                                        taskDefinitionOverride,
                                                        image,
                                                        repositoryCredentials,
