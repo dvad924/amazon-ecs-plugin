@@ -31,7 +31,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
@@ -84,6 +83,7 @@ public class ECSCloud extends Cloud {
     @CheckForNull
     private String tunnel;
     private String jenkinsUrl;
+    private boolean retainAgents;
     private int retentionTimeout = DescriptorImpl.DEFAULT_RETENTION_TIMEOUT;
     private int slaveTimeoutInSeconds = DescriptorImpl.DEFAULT_SLAVE_TIMEOUT_IN_SECONDS;
     private int taskPollingIntervalInSeconds = DescriptorImpl.DEFAULT_TASK_POLLING_INTERVAL_IN_SECONDS;
@@ -263,6 +263,15 @@ public class ECSCloud extends Cloud {
         this.slaveTimeoutInSeconds = slaveTimeoutInSeconds;
     }
 
+    public boolean getRetainAgents() {
+        return retainAgents;
+    }
+
+    @DataBoundSetter
+    public void setRetainAgents(boolean retainAgents) {
+        this.retainAgents = retainAgents;
+    }
+
     public int getRetentionTimeout() {
         // this is only needed for edge cases, where in the config was nothing set
         // and then 0 is assumed as default which breaks things.
@@ -322,7 +331,6 @@ public class ECSCloud extends Cloud {
     public void setMaxMemoryReservation(int maxMemoryReservation) {
         this.maxMemoryReservation = maxMemoryReservation;
     }
-
 
     private class ProvisioningCallback implements Callable<Node> {
 

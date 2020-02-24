@@ -75,7 +75,6 @@ public class ECSTaskTemplateStepExecution extends AbstractStepExecutionImpl {
 
         newTemplate = new ECSTaskTemplate(name,
                                           step.getLabel(),
-                                          0, // minRetainedNodes = 0 for one-off pipeline agents
                                           step.getTaskDefinitionOverride(),
                                           step.getImage(),
                                           step.getRepositoryCredentials(),
