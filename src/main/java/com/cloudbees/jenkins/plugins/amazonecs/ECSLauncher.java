@@ -130,6 +130,12 @@ public class ECSLauncher extends JNLPLauncher {
                         taskRunning = true;
                         break;
                     }
+                    if (taskStatus.equals("PROVISIONING")) {
+                        LOGGER.log(INFO, "[{0}]: Waiting for agent to provision", new Object[]{agent.getNodeName()});
+                        logger.printf("Waiting for agent to provision: %1$s%n", agent.getNodeName());
+                        Thread.sleep(cloud.getTaskPollingIntervalInSeconds() * 1000);
+                        continue;
+                    }
                     if (taskStatus.equals("STOPPED")) {
                         LOGGER.log(Level.WARNING, "[{0}]: ECS Task stopped: {1}", new Object[]{agent.getNodeName(), task.getStoppedReason()});
                         logger.printf("ECS Task stopped: %1$s%n", task.getStoppedReason());
