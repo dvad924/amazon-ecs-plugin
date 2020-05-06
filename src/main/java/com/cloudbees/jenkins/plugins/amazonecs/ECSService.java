@@ -359,7 +359,7 @@ class ECSService {
                 .withPlacementStrategy(template.getPlacementStrategyEntries())
                 .withCluster(clusterArn);
 
-        if (! template.getLaunchType().equals("Default Capacity Provider")) {
+        if (template.getLaunchType() != null && !template.getLaunchType().equals("Default Capacity Provider")) {
             req.withLaunchType(LaunchType.fromValue(template.getLaunchType()));
         }
         
