@@ -20,7 +20,12 @@ build: init
 	@docker-compose exec -T amazon-ecs-plugin-temp mvn clean install
 	
 
-.PHONY: test
+.PHONY: version
+version: init
+	# Will have logs, extract version with $(make version | tail -n 1)
+	docker-compose exec -T amazon-ecs-plugin-temp mvn help:evaluate -Dexpression=project.version -q -DforceStdout
+
+.PHONY: clean
 clean:
 	# Remove containers and leftover files...
 	@docker-compose exec -T amazon-ecs-plugin-temp mvn clean
