@@ -1,3 +1,4 @@
+# (TEMPORARY plugin till Capacity Provider support makes it to offical repo) 
 # Amazon Elastic Container Service (ECS / Fargate) Plugin for Jenkins
 
 [![Build Status](https://ci.jenkins.io/job/Plugins/job/amazon-ecs-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/amazon-ecs-plugin/job/master/)
