@@ -116,7 +116,7 @@ public class ECSLauncher extends JNLPLauncher {
             long timeout = System.currentTimeMillis() + Duration.ofSeconds(cloud.getSlaveTimeoutInSeconds()).toMillis();
 
             boolean taskRunning = false;
-	        boolean isProvisioning = false;
+            boolean isProvisioning = false;
             Task task = null;
             while (System.currentTimeMillis() < timeout) {
 
@@ -132,10 +132,10 @@ public class ECSLauncher extends JNLPLauncher {
                         break;
                     }
                     if (taskStatus.equals("PROVISIONING")) {
-			            if (!isProvisioning) {
-			                LOGGER.log(INFO, "[{0}]: Agent is in provisioning state", new Object[]{agent.getNodeName()});
-			            }
-			            isProvisioning = true;
+                        if (!isProvisioning) {
+                            LOGGER.log(INFO, "[{0}]: Agent is in provisioning state", new Object[]{agent.getNodeName()});
+                        }
+                        isProvisioning = true;
                         Thread.sleep(cloud.getTaskPollingIntervalInSeconds() * 1000);
                         continue;
                     }
