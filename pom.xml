@@ -26,12 +26,12 @@
     </parent>
 
     <groupId>com.cloudbees.jenkins.plugins</groupId>
-    <artifactId>amazon-ecs</artifactId>
-    <version>1.34-testcapacityprovider</version>
+    <artifactId>amazon-ecs-temp</artifactId>
+    <version>1.34-capacityprovider</version>
     <packaging>hpi</packaging>
     <name>Amazon Elastic Container Service (ECS) / Fargate plugin</name>
     <description>Jenkins plugin to run dynamic agents in a Amazon ECS/Docker environment</description>
-    <url>https://github.com/jenkinsci/amazon-ecs-plugin</url>
+    <url>https://ghe.coxautoinc.com/DT-SFI-ProdEng/amazon-ecs-plugin-temp</url>
 
     <properties>
         <jenkins.version>2.176.1</jenkins.version>
@@ -55,10 +55,10 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/jenkinsci/amazon-ecs-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:jenkinsci/amazon-ecs-plugin.git</developerConnection>
-        <url>https://github.com/jenkinsci/amazon-ecs-plugin</url>
-        <tag>amazon-ecs-1.34-testcapacityprovider</tag>
+        <connection>scm:git:git://ghe.coxautoinc.com:DT-SFI-ProdEng/amazon-ecs-plugin-temp.git</connection>
+        <developerConnection>scm:git:git@ghe.coxautoinc.com:DT-SFI-ProdEng/amazon-ecs-plugin-temp.git</developerConnection>
+        <url>https://ghe.coxautoinc.com/DT-SFI-ProdEng/amazon-ecs-plugin-temp</url>
+        <tag>amazon-ecs-temp-1.34-capacityprovider</tag>
     </scm>
 
     <repositories>
