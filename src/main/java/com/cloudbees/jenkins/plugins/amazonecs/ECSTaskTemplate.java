@@ -96,6 +96,11 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
     private final String taskDefinitionOverride;
 
     /**
+     * ARN of the task definition created for a dynamic agent
+     */
+    private String dynamicTaskDefinitionOverride;
+
+    /**
      * Docker image
      * @see ContainerDefinition#withImage(String)
      */
@@ -265,6 +270,8 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
     private List<PortMappingEntry> portMappings;
     private List<PlacementStrategyEntry> placementStrategies;
 
+
+
     /**
     * The log configuration specification for the container.
     * This parameter maps to LogConfig in the Create a container section of
@@ -291,6 +298,7 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
     public ECSTaskTemplate(String templateName,
                            @Nullable String label,
                            @Nullable String taskDefinitionOverride,
+                           @Nullable String dynamicTaskDefinitionOverride,
                            String image,
                            @Nullable final String repositoryCredentials,
                            String launchType,
@@ -357,6 +365,12 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
         this.taskrole = taskrole;
         this.inheritFrom = inheritFrom;
         this.sharedMemorySize = sharedMemorySize;
+        this.dynamicTaskDefinitionOverride = StringUtils.trimToNull(dynamicTaskDefinitionOverride);
+    }
+
+    @DataBoundSetter
+    public void setDynamicTaskDefinition(String dynamicTaskDefArn) {
+        this.dynamicTaskDefinitionOverride = StringUtils.trimToNull(dynamicTaskDefArn);
     }
 
     @DataBoundSetter
@@ -420,6 +434,10 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
 
     public String getTaskDefinitionOverride() {
         return taskDefinitionOverride;
+    }
+
+    public String getDynamicTaskDefinition() {
+        return dynamicTaskDefinitionOverride;
     }
 
     public String getImage() {
@@ -633,6 +651,7 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
         boolean privileged = this.privileged ? this.privileged : parent.getPrivileged();
         String containerUser = isNullOrEmpty(this.containerUser) ? parent.getContainerUser() : this.containerUser;
         String logDriver = isNullOrEmpty(this.logDriver) ? parent.getLogDriver() : this.logDriver;
+        String entrypoint = isNullOrEmpty(this.entrypoint) ? parent.getEntrypoint() : this.entrypoint;
 
         // TODO probably merge lists with parent instead of overriding them
         List<LogDriverOption> logDriverOptions = isEmpty(this.logDriverOptions) ? parent.getLogDriverOptions() : this.logDriverOptions;
@@ -648,6 +667,7 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
         ECSTaskTemplate merged = new ECSTaskTemplate(templateName,
                                                        label,
                                                        taskDefinitionOverride,
+                                                       null,
                                                        image,
                                                        repositoryCredentials,
                                                        launchType,
@@ -977,7 +997,13 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
             return options;
         }
 
-        public FormValidation doCheckTemplateName(@QueryParameter String value) throws IOException, ServletException {
+        public FormValidation doCheckTemplateName(
+            @QueryParameter String value,
+            @QueryParameter String taskDefinitionOverride
+        ) throws IOException, ServletException {
+            if (!isNullOrEmpty(taskDefinitionOverride)) {
+                return FormValidation.ok();
+            }
             if (value.length() > 0 && value.length() <= 127 && value.matches(TEMPLATE_NAME_PATTERN)) {
                 return FormValidation.ok();
             }
@@ -999,11 +1025,25 @@ public class ECSTaskTemplate extends AbstractDescribableImpl<ECSTaskTemplate> im
         }
 
         /* we validate both memory and memoryReservation fields to the same rules */
-        public FormValidation doCheckMemory(@QueryParameter("memory") int memory, @QueryParameter("memoryReservation") int memoryReservation) throws IOException, ServletException {
+        public FormValidation doCheckMemory(
+            @QueryParameter("memory") int memory,
+            @QueryParameter("memoryReservation") int memoryReservation,
+            @QueryParameter String taskDefinitionOverride
+        ) throws IOException, ServletException {
+            if (!isNullOrEmpty(taskDefinitionOverride)) {
+                return FormValidation.ok();
+            }
             return validateMemorySettings(memory,memoryReservation);
         }
 
-        public FormValidation doCheckMemoryReservation(@QueryParameter("memory") int memory, @QueryParameter("memoryReservation") int memoryReservation) throws IOException, ServletException {
+        public FormValidation doCheckMemoryReservation(
+            @QueryParameter("memory") int memory,
+            @QueryParameter("memoryReservation") int memoryReservation,
+            @QueryParameter String taskDefinitionOverride
+        ) throws IOException, ServletException {
+            if (!isNullOrEmpty(taskDefinitionOverride)) {
+                return FormValidation.ok();
+            }
             return validateMemorySettings(memory,memoryReservation);
         }
 
